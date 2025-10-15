@@ -730,13 +730,18 @@ MonoBehaviour:
   - {fileID: 2081532115668943053, guid: 9c29a07279b374e2aaf7a015da15211e, type: 3}
   - {fileID: 2081532115668943053, guid: 9c29a07279b374e2aaf7a015da15211e, type: 3}
   - {fileID: 2081532115668943053, guid: 9c29a07279b374e2aaf7a015da15211e, type: 3}
+  - {fileID: 919132149155446097, guid: f0b8c1c95ce79ec4d9a5a089bc9fdee2, type: 3}
+  - {fileID: 919132149155446097, guid: f0b8c1c95ce79ec4d9a5a089bc9fdee2, type: 3}
   - {fileID: 919132149155446097, guid: 17b565173ef973647a7c2db144c0e2b4, type: 3}
   - {fileID: 919132149155446097, guid: 17b565173ef973647a7c2db144c0e2b4, type: 3}
   - {fileID: 919132149155446097, guid: 17b565173ef973647a7c2db144c0e2b4, type: 3}
+  - {fileID: 3319825933102930435, guid: ac8336763c0c047aca9a469c10d3f448, type: 3}
   - {fileID: 4070209521177695457, guid: 10ae278da906f451594d7989d76b6d15, type: 3}
+  - {fileID: 919132149155446097, guid: 0e60d166db76f2b4cb8c63263e1f0fe9, type: 3}
   - {fileID: 6217192625371338093, guid: 8b3b585cc9dbb43ff97ab0579e85fd71, type: 3}
+  - {fileID: 919132149155446097, guid: eebf2fda48302374bbac4c66134c3ba3, type: 3}
   - {fileID: 9185519998980853174, guid: 486b535a9aae8446f9346d286631b31d, type: 3}
-  enemySpawnPerSecond: 0.5
+  enemySpawnPerSecond: 1
   enemyInsetDefault: 1.5
   gameRestartDelay: 2
   prefabPowerUp: {fileID: 4340904055459977578, guid: 5a8ff8aaddd9f480fb6c6a9b3e550a12, type: 3}
@@ -747,10 +752,10 @@ MonoBehaviour:
     weaponModelPrefab: {fileID: 919132149155446097, guid: 0522e2d6add5631469273543744ebf7f, type: 3}
     projectilePrefab: {fileID: 8884485313326729009, guid: 93cdb1254cc5842aeb5402d7b9f73a99, type: 3}
     projectileColor: {r: 1, g: 1, b: 1, a: 1}
-    damageOnHit: 1
+    damageOnHit: 0.75
     damagePerSec: 0
-    delayBetweenShots: 0.2
-    velocity: 50
+    delayBetweenShots: 0.15
+    velocity: 75
   - type: 2
     letter: S
     powerUpColor: {r: 0.18623178, g: 0.8773585, b: 0.8561891, a: 1}
@@ -758,9 +763,9 @@ MonoBehaviour:
     projectilePrefab: {fileID: 8884485313326729009, guid: 93cdb1254cc5842aeb5402d7b9f73a99, type: 3}
     projectileColor: {r: 0.18039216, g: 0.8784314, b: 0.85490197, a: 1}
     damageOnHit: 1
-    damagePerSec: 0
-    delayBetweenShots: 0.4
-    velocity: 50
+    damagePerSec: 0.25
+    delayBetweenShots: 0.5
+    velocity: 100
   - type: 6
     letter: O
     powerUpColor: {r: 0, g: 1, b: 0, a: 1}
@@ -771,7 +776,7 @@ MonoBehaviour:
     damagePerSec: 0
     delayBetweenShots: 0
     velocity: 50
-  powerUpFrequency: 01000000010000000200000006000000
+  powerUpFrequency: 0100000001000000010000000200000006000000
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
