@@ -588,7 +588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e58b265a06034356b13ba5ddb7c9c0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 60
+  speed: 50
   rollMult: -405
   pitchMult: 35
   projectilePrefab: {fileID: 8884485313326729009, guid: 93cdb1254cc5842aeb5402d7b9f73a99, type: 3}
@@ -743,7 +743,7 @@ MonoBehaviour:
   - {fileID: 9185519998980853174, guid: 486b535a9aae8446f9346d286631b31d, type: 3}
   enemySpawnPerSecond: 1
   enemyInsetDefault: 1.5
-  gameRestartDelay: 2
+  gameRestartDelay: 1.5
   prefabPowerUp: {fileID: 4340904055459977578, guid: 5a8ff8aaddd9f480fb6c6a9b3e550a12, type: 3}
   weaponDefinitions:
   - type: 1
@@ -762,8 +762,8 @@ MonoBehaviour:
     weaponModelPrefab: {fileID: 919132149155446097, guid: 8b6e5debbe11f9241ade9814e3d16d70, type: 3}
     projectilePrefab: {fileID: 8884485313326729009, guid: 93cdb1254cc5842aeb5402d7b9f73a99, type: 3}
     projectileColor: {r: 0.18039216, g: 0.8784314, b: 0.85490197, a: 1}
-    damageOnHit: 1
-    damagePerSec: 0.25
+    damageOnHit: 1.25
+    damagePerSec: 0
     delayBetweenShots: 0.5
     velocity: 100
   - type: 6
@@ -776,7 +776,7 @@ MonoBehaviour:
     damagePerSec: 0
     delayBetweenShots: 0
     velocity: 50
-  powerUpFrequency: 0100000001000000010000000200000006000000
+  powerUpFrequency: 01000000010000000100000001000000020000000600000006000000
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
