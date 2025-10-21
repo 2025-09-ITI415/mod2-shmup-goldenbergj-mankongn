@@ -140,6 +140,11 @@ public class Weapon : MonoBehaviour
                 p.vel = p.transform.rotation * vel;
                 break;
 
+            case eWeaponType.laser:
+                p = MakeProjectile();
+                p.vel = vel;
+                break;
+
         }
     }
 
