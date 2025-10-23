@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5011982356724754846}
   - component: {fileID: 8215859263095270135}
   - component: {fileID: 5892080703320810961}
-  - component: {fileID: -5523630582924550684}
   - component: {fileID: -2393177835353120053}
+  - component: {fileID: 3574748355323681525}
   m_Layer: 8
   m_Name: ProjectileLaser
   m_TagString: Untagged
@@ -138,20 +138,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!114 &-5523630582924550684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8884485313326729009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4955930ab6734845b183a0d1b67dffb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigid: {fileID: 0}
-  _type: 0
 --- !u!114 &-2393177835353120053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,3 +156,15 @@ MonoBehaviour:
   screenLocs: 0
   camWidth: 0
   camHeight: 0
+--- !u!114 &3574748355323681525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8884485313326729009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 954e578a2c055124dac4672837811467, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -122,6 +122,9 @@ public class Weapon : MonoBehaviour
         ProjectileHero p;
         Vector3 vel = Vector3.up * def.velocity;
 
+        ProjectileLaser l;
+        Vector3 vel = Vector3.up * def.velocity;
+
         switch (type)
         {                                                      // k
             case eWeaponType.blaster:
@@ -141,8 +144,8 @@ public class Weapon : MonoBehaviour
                 break;
 
             case eWeaponType.laser:
-                p = MakeProjectile();
-                p.vel = vel;
+                l = MakeLaser();
+                l.vel = vel;
                 break;
 
         }
@@ -161,6 +164,20 @@ public class Weapon : MonoBehaviour
         p.type = type;
         nextShotTime = Time.time + def.delayBetweenShots;                    // p
         return (p);
+    }
+    private ProjectileLaser MakeLaser()
+    {
+        GameObject go;
+        go = Instantiate<GameObject>(def.projectilePrefab, PROJECTILE_ANCHOR); // n
+        ProjectileHero l = go.GetComponent<ProjectileHero>();
+
+        Vector3 pos = shotPointTrans.position;
+        pos.z = 0;                                                            // o
+        l.transform.position = pos;
+
+        l.type = type;
+        nextShotTime = Time.time + def.delayBetweenShots;                    // p
+        return (l);
     }
 }
 
