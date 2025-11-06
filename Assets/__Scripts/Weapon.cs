@@ -56,6 +56,7 @@ public class Weapon : MonoBehaviour
 
     [Header("Dynamic")]                                                        // a
     [SerializeField]                                                           // a
+    public GameObject enemyProjectilePrefab;
     [Tooltip("Setting this manually while playing does not work properly.")]   // a
     private eWeaponType _type = eWeaponType.none;
     public WeaponDefinition def;
@@ -123,29 +124,36 @@ public class Weapon : MonoBehaviour
         if (!gameObject.activeInHierarchy) return;
         if (!bypassCooldown && Time.time < nextShotTime) return;
 
-        ProjectileHero p;
         Vector3 vel = shotPointTrans.up * def.velocity;
         Vector3 dirXY = Vector3.ProjectOnPlane(aimDir, Vector3.forward).normalized;
+        float speed = def.velocity;
 
         switch (type) {
             case eWeaponType.blaster:
-                p = MakeProjectile();
-                p.transform.rotation = Quaternion.LookRotation(Vector3.forward, dirXY);
-                p.vel = dirXY * def.velocity;
-
+                if (enemyProjectilePrefab != null)
+                {
+                    ProjectileEnemy p = MakeEnemyProjectile(enemyProjectilePrefab);
+                    p.transform.rotation = Quaternion.LookRotation(Vector3.forward, dirXY);
+                    p.vel = dirXY * speed;
+                } else
+                {
+                    ProjectileHero p = MakeProjectile();
+                    p.vel = dirXY * speed;
+                }
+                
                 break;
 
             case eWeaponType.spread:
-                p = MakeProjectile();
-                p.vel = vel;
+                ProjectileHero ps = MakeProjectile();
+                ps.vel = vel;
 
-                p = MakeProjectile();
-                p.transform.rotation = Quaternion.AngleAxis(10, Vector3.back);
-                p.vel = p.transform.up * def.velocity;
+                ps = MakeProjectile();
+                ps.transform.rotation = Quaternion.AngleAxis(10, Vector3.back);
+                ps.vel = ps.transform.up * def.velocity;
 
-                p = MakeProjectile();
-                p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back);
-                p.vel = p.transform.up * def.velocity;
+                ps = MakeProjectile();
+                ps.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back);
+                ps.vel = ps.transform.up * def.velocity;
                 break;
         }
         nextShotTime = bypassCooldown ? Time.time : Time.time + def.delayBetweenShots;
@@ -196,6 +204,18 @@ public class Weapon : MonoBehaviour
 
         p.type = type;
         return (p);
+    }
+
+    public ProjectileEnemy MakeEnemyProjectile(GameObject enemyProjectilePrefab)
+    {
+        GameObject go = Instantiate(enemyProjectilePrefab, PROJECTILE_ANCHOR);
+        Vector3 pos = shotPointTrans.position;
+        pos.z = 0;
+        go.transform.position = pos;
+
+        ProjectileEnemy p = go.GetComponent<ProjectileEnemy>();
+        nextShotTime = Time.time + def.delayBetweenShots;
+        return p;
     }
 }
 

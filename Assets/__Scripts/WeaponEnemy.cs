@@ -3,8 +3,12 @@ using UnityEngine;
 [RequireComponent(typeof(Enemy))]
 public class WeaponEnemy : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject enemyProjectilePrefab;
+    [SerializeField]
+    private float projectileSpeed = 20f;
     public Weapon weapon;
-    public bool weaponCooldown = true;
+    public bool weaponCooldown = false;
     public float fireEvery = 2f;
     public float initialDelay = 0.5f;
 
@@ -27,23 +31,27 @@ public class WeaponEnemy : MonoBehaviour
     void Update()
     {
         if (weapon == null) return;
+        if(enemyProjectilePrefab == null) return;
 
         Vector3 enemyMovement = transform.position - lastPos;
         Vector3 aimDir = enemyMovement.normalized;
         lastPos = transform.position;
 
-        if (weaponCooldown)
+        if (Time.time >= nextFireAt)
         {
-            if (Time.time >= nextFireAt) {
-                weapon.TryFire(aimDir, false);
-                nextFireAt = Time.time + 0.05f;
-            }
-        } else
-        {
-            if (Time.time >= nextFireAt) {
-                weapon.TryFire(aimDir, true);
-                nextFireAt = Time.time + Mathf.Max(0.05f, fireEvery);
-            }
+            FireEnemyShot(aimDir);
+            nextFireAt = Time.time + Mathf.Max(0.05f, fireEvery);
         }
+    }
+
+    void FireEnemyShot(Vector3 dir)
+    {
+        ProjectileEnemy p = weapon.MakeEnemyProjectile(enemyProjectilePrefab);
+
+        if (p == null) return;
+
+        Vector3 dirXY = Vector3.ProjectOnPlane(dir, Vector3.forward).normalized;
+        p.transform.rotation = Quaternion.LookRotation(Vector3.forward, dirXY);
+        p.vel = dirXY * projectileSpeed;
     }
 }
