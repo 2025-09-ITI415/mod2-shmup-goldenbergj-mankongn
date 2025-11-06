@@ -36,6 +36,14 @@ public class Enemy : MonoBehaviour
             this.transform.position = value;
         }
     }
+    public void TakeDamage(float damage)
+{
+    health -= damage;
+    if (health <= 0)
+    {
+        Destroy(gameObject);
+    }
+}
 
     void Update()
     {
