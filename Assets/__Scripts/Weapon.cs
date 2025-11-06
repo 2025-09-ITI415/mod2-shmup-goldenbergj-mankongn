@@ -61,7 +61,8 @@ public class Weapon : MonoBehaviour
     public WeaponDefinition def;
     public float nextShotTime; // Time the Weapon will fire next
     [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private bool isFiringLaser = false;
+    private bool isFiringLaser = false;
+
     [SerializeField] private float maxLaserDistance = 25f;
 
     private GameObject weaponModel;
@@ -117,6 +118,8 @@ public class Weapon : MonoBehaviour
 
     public void Fire()
     {
+        Debug.Log("Weapon.Fire() called for: " + type);
+
         // If this.gameObject is inactive, return
         if (!gameObject.activeInHierarchy) return;                         // i
         // If it hasn’t been enough time between shots, return
@@ -145,7 +148,9 @@ public class Weapon : MonoBehaviour
 
             case eWeaponType.laser:
                 if (!isFiringLaser)
+                {
                     StartCoroutine(FireLaser());
+                }
                 break;
 
         }
@@ -169,30 +174,30 @@ public class Weapon : MonoBehaviour
 {
     isFiringLaser = true;
 
-    // Ensure we have a LineRenderer
+    // Create LineRenderer if missing
     if (lineRenderer == null)
     {
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
+        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        lineRenderer.startColor = Color.cyan;
+        lineRenderer.endColor = Color.cyan;
         lineRenderer.useWorldSpace = true;
-
-        // simple material if none assigned
-        var mat = new Material(Shader.Find("Unlit/Color"));
-        mat.color = def.projectileColor;
-        lineRenderer.material = mat;
     }
 
     lineRenderer.enabled = true;
 
-    // Keep beam active while Fire1 is held
+    Debug.Log("Laser active: drawing beam...");
+
     while (Input.GetButton("Fire1"))
     {
         Vector3 origin = shotPointTrans.position;
-        Vector3 dir = Vector3.up; // up = forward in this SHMUP
-
-        RaycastHit2D hit = Physics2D.Raycast(origin, dir, 25f);
+        Vector3 dir = Vector3.up;
+        lineRenderer.SetPosition(0, new Vector3(origin.x, origin.y, 0));
+    
+        if (Physics.Raycast(origin, dir, out RaycastHit hit, 25f))
 
         if (hit.collider != null)
         {
@@ -203,6 +208,7 @@ public class Weapon : MonoBehaviour
             if (e != null)
             {
                 e.TakeDamage(def.damagePerSec * Time.deltaTime);
+                Debug.Log("Laser hit enemy: " + e.name);
             }
         }
         else
@@ -214,9 +220,11 @@ public class Weapon : MonoBehaviour
         yield return null;
     }
 
+    Debug.Log("Laser stopped.");
     lineRenderer.enabled = false;
     isFiringLaser = false;
 }
+
 
 
 }

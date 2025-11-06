@@ -172,7 +172,7 @@ public class Hero : MonoBehaviour
 
             default:
                 if (pUp.type == weapons[0].type)
-                { // If it is the same type
+                { 
                     Weapon weap = GetEmptyWeaponSlot();
                     if (weap != null)
                     {
@@ -180,20 +180,16 @@ public class Hero : MonoBehaviour
                     }
                 }
                 else
-                { // If this is a different weapon type
+                { 
                     ClearWeapons();
                     weapons[0].SetType(pUp.type);
 
-                    // === FIX: reconnect the fire event so new weapon can shoot ===
                     Weapon w = weapons[0];
                     if (w != null)
                     {
-                        // Unsubscribe first just in case
                         fireEvent -= w.Fire;
-                        // Then re-subscribe
                         fireEvent += w.Fire;
                     }
-                    // === end fix ===
                 }
                 break;
 
