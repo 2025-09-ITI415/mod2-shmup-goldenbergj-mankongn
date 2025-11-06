@@ -10,6 +10,7 @@ public class WeaponEnemy : MonoBehaviour
 
     float nextFireAt;
     Enemy enemy;
+    Vector3 lastPos;
 
     void Awake()
     {
@@ -20,22 +21,27 @@ public class WeaponEnemy : MonoBehaviour
     void OnEnable()
     {
         nextFireAt = Time.time + Random.Range(0f, initialDelay);
+        lastPos = transform.position;
     }
 
     void Update()
     {
         if (weapon == null) return;
 
+        Vector3 enemyMovement = transform.position - lastPos;
+        Vector3 aimDir = enemyMovement.normalized;
+        lastPos = transform.position;
+
         if (weaponCooldown)
         {
             if (Time.time >= nextFireAt) {
-                weapon.TryFire();
+                weapon.TryFire(aimDir, false);
                 nextFireAt = Time.time + 0.05f;
             }
         } else
         {
             if (Time.time >= nextFireAt) {
-                weapon.TryFire();
+                weapon.TryFire(aimDir, true);
                 nextFireAt = Time.time + Mathf.Max(0.05f, fireEvery);
             }
         }

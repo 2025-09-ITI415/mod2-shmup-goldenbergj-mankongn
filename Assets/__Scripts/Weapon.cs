@@ -114,17 +114,22 @@ public class Weapon : MonoBehaviour
 
     public void TryFire()
     {
+    Vector3 aim = (shotPointTrans != null ? shotPointTrans.up : Vector3.up);
+    TryFire(aim, false);
+    }
+    
+    public void TryFire(Vector3 aimDir, bool bypassCooldown = false)
+    {
         if (!gameObject.activeInHierarchy) return;
-        if (Time.time < nextShotTime) return;
+        if (!bypassCooldown && Time.time < nextShotTime) return;
 
         ProjectileHero p;
         Vector3 vel = shotPointTrans.up * def.velocity;
+        Vector3 dirXY = Vector3.ProjectOnPlane(aimDir, Vector3.forward).normalized;
 
         switch (type) {
             case eWeaponType.blaster:
                 p = MakeProjectile();
-                // Aim direction flattened to the XY plane
-                Vector3 dirXY = Vector3.ProjectOnPlane(shotPointTrans.up, Vector3.forward).normalized;
                 p.transform.rotation = Quaternion.LookRotation(Vector3.forward, dirXY);
                 p.vel = dirXY * def.velocity;
 
@@ -135,14 +140,15 @@ public class Weapon : MonoBehaviour
                 p.vel = vel;
 
                 p = MakeProjectile();
-                p.transform.rotation = Quaternion.AngleAxis(10, Vector3.back) * shotPointTrans.rotation;
+                p.transform.rotation = Quaternion.AngleAxis(10, Vector3.back);
                 p.vel = p.transform.up * def.velocity;
 
                 p = MakeProjectile();
-                p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back) * shotPointTrans.rotation;
+                p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back);
                 p.vel = p.transform.up * def.velocity;
                 break;
         }
+        nextShotTime = bypassCooldown ? Time.time : Time.time + def.delayBetweenShots;
     }
 
     private void Fire()
@@ -174,6 +180,8 @@ public class Weapon : MonoBehaviour
                 break;
 
         }
+
+        nextShotTime = Time.time + def.delayBetweenShots;
     }
 
     private ProjectileHero MakeProjectile()
@@ -187,7 +195,6 @@ public class Weapon : MonoBehaviour
         p.transform.position = pos;
 
         p.type = type;
-        nextShotTime = Time.time + def.delayBetweenShots;                    // p
         return (p);
     }
 }
