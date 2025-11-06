@@ -13,9 +13,12 @@ public class ProjectileLaser : MonoBehaviour
     }
 
     private void Update()
-    {
-        transform.position += transform.up * speed * Time.deltaTime;
-    }
+{
+    transform.position += Vector3.up * speed * Time.deltaTime;
+    Debug.DrawRay(transform.position, Vector3.up * 2, Color.cyan);
+    Debug.Log($"Laser pos {transform.position} world up {Vector3.up}");
+}
+
 
     private void OnTriggerStay(Collider other)
     {

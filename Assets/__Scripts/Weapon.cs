@@ -48,7 +48,7 @@ public class WeaponDefinition
     public float delayBetweenShots = 0;
     [Tooltip("Velocity of individual Projectiles")]
     public float velocity = 50;
-    [SerializeField] private Transform shotPoint;
+
 
 }
 

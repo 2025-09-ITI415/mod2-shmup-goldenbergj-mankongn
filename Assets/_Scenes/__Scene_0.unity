@@ -779,9 +779,9 @@ MonoBehaviour:
     projectileColor: {r: 0.54905653, g: 0.86065096, b: 1, a: 1}
     damageOnHit: 0
     damagePerSec: 10
-    delayBetweenShots: 0
+    delayBetweenShots: 0.5
     velocity: 50
-  powerUpFrequency: 01000000050000000500000006000000
+  powerUpFrequency: 05000000050000000500000005000000
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
