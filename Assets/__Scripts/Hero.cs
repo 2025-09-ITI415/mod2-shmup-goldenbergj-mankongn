@@ -170,25 +170,34 @@ public class Hero : MonoBehaviour
                 shieldLevel++;
                 break;
 
-            default:                                                             // b
+            default:
                 if (pUp.type == weapons[0].type)
-                { // If it is the same type     // c
+                { // If it is the same type
                     Weapon weap = GetEmptyWeaponSlot();
                     if (weap != null)
                     {
-                        // Set it to pUp.type
                         weap.SetType(pUp.type);
                     }
                 }
                 else
-                { // If this is a different weapon type                   // d
+                { // If this is a different weapon type
                     ClearWeapons();
                     weapons[0].SetType(pUp.type);
+
+                    // === FIX: reconnect the fire event so new weapon can shoot ===
+                    Weapon w = weapons[0];
+                    if (w != null)
+                    {
+                        // Unsubscribe first just in case
+                        fireEvent -= w.Fire;
+                        // Then re-subscribe
+                        fireEvent += w.Fire;
+                    }
+                    // === end fix ===
                 }
                 break;
 
         }
-        pUp.AbsorbedBy(this.gameObject);
-    }
 
+    }
 }
