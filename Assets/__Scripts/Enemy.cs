@@ -64,10 +64,10 @@ public class Enemy : MonoBehaviour
         // Check for collisions with ProjectileHero
         ProjectileHero p = otherGO.GetComponent<ProjectileHero>();
         if (p != null)
-        {                                                  
+        {
             // Only damage this Enemy if it’s on screen
             if (bndCheck.isOnScreen)
-            {                                      
+            {
                 // Get the damage amount from the Main WEAP_DICT.
                 health -= Main.GET_WEAPON_DEFINITION(p.type).damageOnHit;
                 if (health <= 0)
@@ -89,5 +89,25 @@ public class Enemy : MonoBehaviour
             print("Enemy hit by non-ProjectileHero: " + otherGO.name);      // f
         }
     }
+    public void TakeDamage(float damage)
+{
+    // Reduce health gradually (for laser, DoT weapons, etc.)
+    health -= damage;
+
+    if (bndCheck.isOnScreen)
+    {
+        if (health <= 0)
+        {
+            if (!calledShipDestroyed)
+            {
+                calledShipDestroyed = true;
+                Main.SHIP_DESTROYED(this);
+            }
+
+            Destroy(this.gameObject);
+        }
+    }
+}
+
 
 }

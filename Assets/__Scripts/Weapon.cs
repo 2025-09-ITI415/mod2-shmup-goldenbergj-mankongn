@@ -48,6 +48,8 @@ public class WeaponDefinition
     public float delayBetweenShots = 0;
     [Tooltip("Velocity of individual Projectiles")]
     public float velocity = 50;
+    [SerializeField] private Transform shotPoint;
+
 }
 
 public class Weapon : MonoBehaviour
@@ -62,7 +64,7 @@ public class Weapon : MonoBehaviour
     public float nextShotTime; // Time the Weapon will fire next
 
     private GameObject weaponModel;
-    private Transform shotPointTrans;
+    public Transform shotPointTrans;
 
     void Start()
     {
@@ -73,7 +75,16 @@ public class Weapon : MonoBehaviour
             PROJECTILE_ANCHOR = go.transform;
         }
 
-        shotPointTrans = transform.GetChild(0);                              // c
+        if (transform.childCount > 0)
+{
+    shotPointTrans = transform.GetChild(0);
+}
+else
+{
+    Debug.LogWarning($"{name} has no child to use as ShotPoint! Using Weapon position instead.");
+    shotPointTrans = transform;
+}
+
 
         // Call SetType() for the default _type set in the Inspector
         SetType(_type);                                                      // d
@@ -140,6 +151,41 @@ public class Weapon : MonoBehaviour
                 p.vel = p.transform.rotation * vel;
                 break;
 
+            case eWeaponType.laser:
+{
+    // Spawn the laser manually instead of using MakeProjectile()
+    Vector3 spawnPos;
+    if (shotPointTrans != null)
+        spawnPos = shotPointTrans.position;
+    else
+        spawnPos = transform.position;
+
+    Quaternion spawnRot = transform.rotation;
+
+    // Instantiate the laser projectile prefab directly
+    GameObject go = Instantiate(def.projectilePrefab, spawnPos, spawnRot);
+
+    // Get the ProjectileLaser component and configure it
+    ProjectileLaser pl = go.GetComponent<ProjectileLaser>();
+    if (pl != null)
+    {
+        pl.damagePerSecond = def.damagePerSec;
+        pl.speed = def.velocity > 0 ? def.velocity : pl.speed;
+        // Optional: tune how long it lasts
+        pl.lifetime = 2.0f;
+    }
+    else
+    {
+        Debug.LogWarning($"{name}: Spawned projectile has no ProjectileLaser component!");
+    }
+
+    nextShotTime = Time.time + def.delayBetweenShots;
+}
+break;
+
+
+
+
         }
     }
 
@@ -149,9 +195,31 @@ public class Weapon : MonoBehaviour
         go = Instantiate<GameObject>(def.projectilePrefab, PROJECTILE_ANCHOR); // n
         ProjectileHero p = go.GetComponent<ProjectileHero>();
 
-        Vector3 pos = shotPointTrans.position;
-        pos.z = 0;                                                            // o
-        p.transform.position = pos;
+        Vector3 pos;
+
+// Safety check – this prevents the null reference forever
+if (shotPointTrans != null)
+{
+    pos = shotPointTrans.position;
+}
+else
+{
+    Debug.LogWarning($"{name}: shotPointTrans is null! Using Weapon position instead.");
+    pos = transform.position;
+
+    // Try to find a child called ShotPoint dynamically (extra safety)
+    Transform possibleShot = transform.Find("ShotPoint");
+    if (possibleShot != null)
+    {
+        shotPointTrans = possibleShot;
+        pos = shotPointTrans.position;
+        Debug.Log($"{name}: Found ShotPoint dynamically at runtime.");
+    }
+}
+
+pos.z = 0;
+p.transform.position = pos;
+
 
         p.type = type;
         nextShotTime = Time.time + def.delayBetweenShots;                    // p
