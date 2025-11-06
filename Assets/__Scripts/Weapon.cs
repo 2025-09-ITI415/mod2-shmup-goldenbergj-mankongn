@@ -60,6 +60,9 @@ public class Weapon : MonoBehaviour
     private eWeaponType _type = eWeaponType.none;
     public WeaponDefinition def;
     public float nextShotTime; // Time the Weapon will fire next
+    private LineRenderer lineRenderer;
+    private float maxLaserDistance = 25f;
+    private bool isFiringLaser = false;
 
     private GameObject weaponModel;
     private Transform shotPointTrans;
@@ -140,6 +143,11 @@ public class Weapon : MonoBehaviour
                 p.vel = p.transform.rotation * vel;
                 break;
 
+            case eWeaponType.laser:
+                if (!isFiringLaser)
+                    StartCoroutine(FireLaser());
+                break;
+
         }
     }
 
@@ -157,6 +165,54 @@ public class Weapon : MonoBehaviour
         nextShotTime = Time.time + def.delayBetweenShots;                    // p
         return (p);
     }
+    private IEnumerator FireLaser()
+{
+    isFiringLaser = true;
+
+    if (lineRenderer == null)
+    {
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.positionCount = 2;
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        lineRenderer.material = new Material(Shader.Find("Unlit/Color"));
+        lineRenderer.material.color = def.projectileColor;
+        lineRenderer.useWorldSpace = true;
+    }
+
+    lineRenderer.enabled = true;
+
+    // Laser loop: active while Fire button is held
+    while (Input.GetButton("Fire1"))
+    {
+        Vector3 origin = shotPointTrans.position;
+        Vector3 dir = Vector3.up;  // up is forward in this SHMUP
+        RaycastHit2D hit = Physics2D.Raycast(origin, dir, maxLaserDistance);
+
+        if (hit.collider != null)
+        {
+            lineRenderer.SetPosition(0, origin);
+            lineRenderer.SetPosition(1, hit.point);
+
+            Enemy e = hit.collider.GetComponent<Enemy>();
+            if (e != null)
+            {
+                e.TakeDamage(def.damagePerSec * Time.deltaTime);
+            }
+        }
+        else
+        {
+            lineRenderer.SetPosition(0, origin);
+            lineRenderer.SetPosition(1, origin + dir * maxLaserDistance);
+        }
+
+        yield return null;
+    }
+
+    lineRenderer.enabled = false;
+    isFiringLaser = false;
+}
+
 }
 
 
