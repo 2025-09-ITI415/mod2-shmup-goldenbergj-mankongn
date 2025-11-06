@@ -139,6 +139,17 @@ public class Weapon : MonoBehaviour
                 p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back);
                 p.vel = p.transform.rotation * vel;
                 break;
+                
+                case eWeaponType.laser:
+{
+    Vector3 spawnPos = shotPointTrans != null ? shotPointTrans.position : transform.position;
+    Quaternion spawnRot = transform.rotation;
+
+    GameObject go = Instantiate(def.projectilePrefab, spawnPos, spawnRot);
+    nextShotTime = Time.time + def.delayBetweenShots;
+}
+break;
+
 
         }
     }
