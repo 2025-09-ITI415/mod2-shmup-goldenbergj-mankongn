@@ -27,6 +27,7 @@ public class ProjectileHero : MonoBehaviour
         bndCheck = GetComponent<BoundsCheck>();
         rend = GetComponent<Renderer>();                                     // d
         rigid = GetComponent<Rigidbody>();
+        rigid.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
     }
 
     void Update()

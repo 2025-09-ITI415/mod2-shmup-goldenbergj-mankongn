@@ -80,7 +80,7 @@ public class Weapon : MonoBehaviour
 
         // Find the fireEvent of a Hero Component in the parent hierarchy
         Hero hero = GetComponentInParent<Hero>();                              // e
-        if (hero != null) hero.fireEvent += Fire;
+        if (hero != null) hero.fireEvent += TryFire;
     }
 
     public eWeaponType type
@@ -110,6 +110,39 @@ public class Weapon : MonoBehaviour
         weaponModel.transform.localScale = Vector3.one;
 
         nextShotTime = 0; // You can fire immediately after _type is set.    // h
+    }
+
+    public void TryFire()
+    {
+        if (!gameObject.activeInHierarchy) return;
+        if (Time.time < nextShotTime) return;
+
+        ProjectileHero p;
+        Vector3 vel = shotPointTrans.up * def.velocity;
+
+        switch (type) {
+            case eWeaponType.blaster:
+                p = MakeProjectile();
+                // Aim direction flattened to the XY plane
+                Vector3 dirXY = Vector3.ProjectOnPlane(shotPointTrans.up, Vector3.forward).normalized;
+                p.transform.rotation = Quaternion.LookRotation(Vector3.forward, dirXY);
+                p.vel = dirXY * def.velocity;
+
+                break;
+
+            case eWeaponType.spread:
+                p = MakeProjectile();
+                p.vel = vel;
+
+                p = MakeProjectile();
+                p.transform.rotation = Quaternion.AngleAxis(10, Vector3.back) * shotPointTrans.rotation;
+                p.vel = p.transform.up * def.velocity;
+
+                p = MakeProjectile();
+                p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back) * shotPointTrans.rotation;
+                p.vel = p.transform.up * def.velocity;
+                break;
+        }
     }
 
     private void Fire()
